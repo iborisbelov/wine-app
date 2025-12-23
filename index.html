@@ -1,13 +1,101 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Figma Make Local Runner</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wine App</title>
+</head>
+
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+
+<!-- Google Translate container (скрытый) -->
+<div id="google-translate-dropdown" style="display:none;"></div>
+
+<!-- Флаги (изначально скрыты) -->
+<div id="lang-switcher">
+  <img id="flag-ru" src="https://flagcdn.com/w20/ru.png" width="20" style="display:block;">
+  <img id="flag-en" src="https://flagcdn.com/w20/gb.png" width="20" style="display:none;">
+</div>
+<style>
+  /* Прячем стандартный UI Google */
+  .skiptranslate,
+  .goog-te-gadget span,
+  .goog-te-banner-frame,
+  .goog-te-gadget-simple {
+    display: none !important;
+  }
+
+  body[data-scroll-locked="1"] #lang-switcher {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  #lang-switcher {
+    position: fixed;
+    top: 20px;
+    right: 53px;
+    z-index: 999999999999999999999;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+  }
+
+  body {
+    top: 0 !important;
+  }
+</style>
+<script>
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'ru',
+      includedLanguages: 'en,ru',
+      autoDisplay: false
+    }, 'google-translate-dropdown');
+  }
+
+  function changeLang(lang) {
+    const select = document.querySelector(".goog-te-combo");
+    if (!select) return;
+    select.value = lang;
+    select.dispatchEvent(new Event("change"));
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const flagRU = document.getElementById("flag-ru");
+    const flagEN = document.getElementById("flag-en");
+    const switcher = document.getElementById("lang-switcher");
+
+    // Показать через 3 секунды
+    setTimeout(() => {
+      switcher.style.display = "flex";
+    }, 5000);
+
+    flagRU.addEventListener("click", function () {
+      changeLang("en");
+      flagRU.style.display = "none";
+      flagEN.style.display = "block";
+    });
+
+    flagEN.addEventListener("click", function () {
+      changeLang("ru");
+      flagEN.style.display = "none";
+      flagRU.style.display = "block";
+    });
+  });
+</script>
+
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+
+
 </html>
